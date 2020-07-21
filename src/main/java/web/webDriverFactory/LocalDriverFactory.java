@@ -1,4 +1,4 @@
-package com.open.hotel.web.webDriverFactory;
+package web.webDriverFactory;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -34,13 +34,6 @@ public class LocalDriverFactory {
 				options.addArguments("start-maximized");
 				options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
 				driver = new ChromeDriver(options);
-			}
-			if (browser.toUpperCase().contains("FF")) {
-				driver = new FirefoxDriver();
-			}
-			if (browser.toUpperCase().contains("IE")) {
-				System.setProperty("webdriver.ie.driver", driverPath + "\\IEDriverServer.exe");
-				driver = new InternetExplorerDriver();
 			}
 		return driver;
 	}

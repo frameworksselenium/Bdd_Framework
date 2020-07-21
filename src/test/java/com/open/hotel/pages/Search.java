@@ -1,7 +1,6 @@
 package com.open.hotel.pages;
 
-import com.open.hotel.web.UiUtils;
-import com.open.hotel.web.webDriverFactory.ManagerDriver;
+import web.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

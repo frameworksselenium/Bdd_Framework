@@ -1,4 +1,4 @@
-package com.open.hotel.web.webDriverFactory;
+package web.webDriverFactory;
 
 import org.openqa.selenium.WebDriver;
 

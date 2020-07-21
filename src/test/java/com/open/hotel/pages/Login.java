@@ -1,6 +1,6 @@
 package com.open.hotel.pages;
 
-import com.open.hotel.web.webDriverFactory.ManagerDriver;
+import web.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -39,13 +39,13 @@ public class Login {
 		this.driver.get(url);
 	}
 
-	public void login(String userName, String password) throws Exception {
+	public void login(String userName, String password) {
 		UserName.sendKeys(userName);
 		Password.sendKeys( password);
 		Login.click();
 	}
 
-	public void LogOut() throws Exception {
+	public void LogOut() {
 		LogOut.click();
 	}
 
