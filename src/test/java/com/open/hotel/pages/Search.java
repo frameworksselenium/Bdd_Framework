@@ -1,6 +1,8 @@
 package com.open.hotel.pages;
 
 import com.open.hotel.web.UiUtils;
+import com.open.hotel.web.webDriverFactory.ManagerDriver;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -8,13 +10,15 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.HashMap;
 
-public class Search extends UiUtils {
+public class Search {
+
+	WebDriver driver = null;
 
 	String page = "Search";
 	public Search(){
-		PageFactory.initElements(driver, this);
+		this.driver = ManagerDriver.getInstance().getWebDriver();
+		PageFactory.initElements(this.driver, this);
 	}
-
 	@FindBy(how = How.NAME, using = "location")
 	WebElement Location;
 	@FindBy(how =How.NAME, using = "room_nos")

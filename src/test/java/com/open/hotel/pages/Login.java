@@ -1,6 +1,6 @@
 package com.open.hotel.pages;
 
-import com.open.hotel.web.UiUtils;
+import com.open.hotel.web.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,15 +9,14 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.concurrent.TimeUnit;
 
-public class Login  extends UiUtils {
+public class Login {
 
-	WebDriver driver1 = null;
+	WebDriver driver = null;
 	String page = "Login";
 
 	public Login(){
-		this.driver1 = driver;
-
-		PageFactory.initElements(driver1, this);
+		this.driver = ManagerDriver.getInstance().getWebDriver();
+		PageFactory.initElements(this.driver, this);
 	}
 
 	@FindBy(how =How.ID, using = "username")
@@ -36,8 +35,8 @@ public class Login  extends UiUtils {
 	WebElement LogOut;
 
 	public void lauchApplication(String url)throws InterruptedException {
-		driver1.manage().timeouts().implicitlyWait(55, TimeUnit.SECONDS);
-		driver1.get(url);
+		this.driver.manage().timeouts().implicitlyWait(55, TimeUnit.SECONDS);
+		this.driver.get(url);
 	}
 
 	public void login(String userName, String password) throws Exception {
