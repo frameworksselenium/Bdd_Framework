@@ -1,6 +1,7 @@
 package com.open.hotel.pages;
 
-import web.webDriverFactory.ManagerDriver;
+import com.open.hotel.utils.UIUtils;
+import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.concurrent.TimeUnit;
 
-public class Login {
+public class Login extends UIUtils {
 
 	WebDriver driver = null;
 	String page = "Login";
@@ -40,13 +41,13 @@ public class Login {
 	}
 
 	public void login(String userName, String password) {
-		UserName.sendKeys(userName);
-		Password.sendKeys( password);
-		Login.click();
+		type(UserName, userName, "UserName", this.page);
+		type(Password, password, "Password", this.page);
+		clickElement(Login, "Login", this.page);
 	}
 
 	public void LogOut() {
-		LogOut.click();
+		clickElement(LogOut, "LogOut", this.page);
 	}
 
 }

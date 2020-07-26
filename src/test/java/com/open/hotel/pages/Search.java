@@ -1,6 +1,7 @@
 package com.open.hotel.pages;
 
-import web.webDriverFactory.ManagerDriver;
+import com.open.hotel.utils.UIUtils;
+import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.HashMap;
 
-public class Search {
+public class Search extends UIUtils {
 
 	WebDriver driver = null;
 
@@ -35,15 +36,15 @@ public class Search {
 
 
 	public void clickOnSearch() throws Exception {
-		Submit.click();
+		clickElement(Submit, "Submit", this.page);
 	}
 	
 	public void enterRoomSearchInfo(HashMap<String, String> values)throws Exception {
-		Location.sendKeys( values.get("Location"));
-		NoOfRoom.sendKeys( values.get("Number of Rooms"));
-		DatepickIn.sendKeys(values.get("Check In Date"));
-		DatepickOut.sendKeys(values.get("Check Out Date"));
-		AdultRoom.sendKeys(values.get("Adults per Room"));
+		type(Location, values.get("Location"), "Location", this.page);
+		type(NoOfRoom, values.get("Number of Rooms"), "NoOfRoom", this.page);
+		type(DatepickIn, values.get("Check In Date"), "DatepickIn", this.page);
+		type(DatepickOut, values.get("Check Out Date"), "DatepickOut", this.page);
+		type(AdultRoom, values.get("Adults per Room"), "AdultRoom", this.page);
 	}
 
 }

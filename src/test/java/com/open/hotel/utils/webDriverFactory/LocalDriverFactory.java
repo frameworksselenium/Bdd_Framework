@@ -1,10 +1,8 @@
-package web.webDriverFactory;
+package com.open.hotel.utils.webDriverFactory;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 
 import java.util.Collections;
 import java.util.HashMap;

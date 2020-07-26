@@ -1,7 +1,7 @@
 Feature: search room in hotel application
 
   @SmokeTest
-  Scenario: search room
+  Scenario: 202:search room
     Then User is able Launch the hotel application using "http://adactin.com/HotelApp/index.php"
     When User enters the "kmanubolu" and "India@123" and click on login button
     #Then User naviaged to home page

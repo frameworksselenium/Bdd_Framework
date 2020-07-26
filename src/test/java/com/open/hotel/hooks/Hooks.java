@@ -1,13 +1,15 @@
 package com.open.hotel.hooks;
 
-import web.webDriverFactory.LocalDriverFactory;
-import web.webDriverFactory.ManagerDriver;
+import com.open.hotel.utils.webDriverFactory.LocalDriverFactory;
+import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
-import web.webDriverFactory.RemoteDriverFactory;
-
+import com.open.hotel.utils.webDriverFactory.RemoteDriverFactory;
+import com.open.hotel.utils.threadLevelVariables.VariableManager;
+import com.open.hotel.utils.threadLevelVariables.Variables;
+import com.open.hotel.runner.TestNGRunner;
 public class Hooks{
 
 	@Before()
@@ -20,10 +22,19 @@ public class Hooks{
 			driver = RemoteDriverFactory.getInstance().createNewDriver();
 		}
 		ManagerDriver.getInstance().setWebDriver(driver);
+		String testCaseName = scenario.getName().split(":")[1];
+		String testCaseID = scenario.getName().split(":")[0];
+		Variables variables = new Variables();
+		VariableManager.getInstance().setVariablesManager(variables);
+		VariableManager.getInstance().getVariablesManager().setObject("testCaseID",testCaseID);
+		VariableManager.getInstance().getVariablesManager().setObject("testCaseName",testCaseName);
+
+		TestNGRunner.htmLog.initilization(testCaseName);
 	}
 			
 	@After()
 	public void afterScenario(Scenario scenario) {
+		TestNGRunner.htmLog.summaryInsertTestCase();
 		WebDriver driver = ManagerDriver.getInstance().getWebDriver();
 		if(driver != null){
 			driver.close();
