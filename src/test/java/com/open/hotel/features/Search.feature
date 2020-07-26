@@ -1,9 +1,9 @@
 Feature: search room in hotel application
 
-  @SmokeTest
+  @SmokeTest1
   Scenario: 202:search room
     Then User is able Launch the hotel application using "http://adactin.com/HotelApp/index.php"
-    When User enters the "kmanubolu" and "India@123" and click on login button
+    When User enters the "kmanubolu" and "USi+QGYRzFE7NU9QEw2rZg==" and click on login button
     #Then User naviaged to home page
     And user enters the required information in search hotel page
       | UILables          | Values      |

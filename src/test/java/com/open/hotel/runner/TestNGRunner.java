@@ -1,7 +1,6 @@
 package com.open.hotel.runner;
 
 import com.open.hotel.utils.html.HtmlLog;
-import com.open.hotel.utils.html.HtmlManager;
 import com.open.hotel.utils.loadConfig.Config;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import org.testng.annotations.AfterSuite;
@@ -25,7 +24,6 @@ import java.util.Properties;
 public class TestNGRunner extends AbstractTestNGCucumberTests {
 
 	public static Properties properties = null;
-	public static HtmlLog htmLog = null;
 	@Override
 	@DataProvider (parallel = true)
 	public Object[][] scenarios() {
@@ -36,16 +34,16 @@ public class TestNGRunner extends AbstractTestNGCucumberTests {
 	@BeforeSuite()
 	public void setup(){
 		properties = Config.init();
-		htmLog = HtmlManager.init();
 		Config.createFolder(properties.getProperty("resultFolder"));
 		Config.createFolder(properties.getProperty("resultFolderName"));
-		htmLog.summaryInitialization("ExecutionSummaryReport");
+		HtmlLog.summaryInitialization("ExecutionSummaryReport");
 
 	}
 
 	@AfterSuite()
 	public void tearDown(){
-		htmLog.summaryCloseHtml(properties.getProperty("Release"));
+
+		HtmlLog.summaryCloseHtml(properties.getProperty("Release"));
 	}
 
 }

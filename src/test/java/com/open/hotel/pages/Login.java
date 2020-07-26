@@ -1,5 +1,6 @@
 package com.open.hotel.pages;
 
+import com.open.hotel.security.Security;
 import com.open.hotel.utils.UIUtils;
 import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
@@ -36,13 +37,15 @@ public class Login extends UIUtils {
 	WebElement LogOut;
 
 	public void lauchApplication(String url)throws InterruptedException {
-		this.driver.manage().timeouts().implicitlyWait(55, TimeUnit.SECONDS);
+		//this.driver.manage().timeouts().implicitlyWait(55, TimeUnit.SECONDS);
 		this.driver.get(url);
 	}
 
 	public void login(String userName, String password) {
 		type(UserName, userName, "UserName", this.page);
-		type(Password, password, "Password", this.page);
+		Security security = new Security();
+		String decryptPasswordValue = security.decryptPassword(password);
+		type(Password, decryptPasswordValue, "Password", this.page);
 		clickElement(Login, "Login", this.page);
 	}
 

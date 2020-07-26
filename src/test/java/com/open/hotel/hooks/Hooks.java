@@ -1,5 +1,6 @@
 package com.open.hotel.hooks;
 
+import com.open.hotel.utils.html.HtmlLog;
 import com.open.hotel.utils.webDriverFactory.LocalDriverFactory;
 import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import io.cucumber.java.Scenario;
@@ -14,6 +15,7 @@ public class Hooks{
 
 	@Before()
 	public void beforeScenario(Scenario scenario){
+
 		String ExecutionMode = "Local";
 		WebDriver driver = null;
 		if (ExecutionMode.contains("Local")) {
@@ -22,19 +24,25 @@ public class Hooks{
 			driver = RemoteDriverFactory.getInstance().createNewDriver();
 		}
 		ManagerDriver.getInstance().setWebDriver(driver);
+
+
 		String testCaseName = scenario.getName().split(":")[1];
 		String testCaseID = scenario.getName().split(":")[0];
+
+
 		Variables variables = new Variables();
 		VariableManager.getInstance().setVariablesManager(variables);
+
+
 		VariableManager.getInstance().getVariablesManager().setObject("testCaseID",testCaseID);
 		VariableManager.getInstance().getVariablesManager().setObject("testCaseName",testCaseName);
 
-		TestNGRunner.htmLog.initilization(testCaseName);
+		HtmlLog.initilization(testCaseName);
 	}
 			
 	@After()
 	public void afterScenario(Scenario scenario) {
-		TestNGRunner.htmLog.summaryInsertTestCase();
+		HtmlLog.summaryInsertTestCase();
 		WebDriver driver = ManagerDriver.getInstance().getWebDriver();
 		if(driver != null){
 			driver.close();

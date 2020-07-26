@@ -8,7 +8,9 @@ import java.util.Properties;
 
 public class Config {
     public static Properties properties = null;
+
     public static Properties init(){
+
         properties = new Properties();
         try{
             File directory = new File (".");
@@ -23,6 +25,7 @@ public class Config {
             throw new RuntimeException(e);
         }
         return properties;
+
     }
 
     public static void createFolder(String folderPath){
@@ -31,4 +34,5 @@ public class Config {
             objDir.mkdir();
         }
     }
+
 }

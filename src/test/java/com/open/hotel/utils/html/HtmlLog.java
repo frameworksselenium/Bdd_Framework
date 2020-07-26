@@ -1,21 +1,25 @@
 package com.open.hotel.utils.html;
 
+import com.open.hotel.utils.UIUtils;
 import com.open.hotel.utils.threadLevelVariables.VariableManager;
+import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import com.open.hotel.runner.TestNGRunner;
+import org.openqa.selenium.WebDriver;
+import sun.plugin.util.UIUtil;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class HtmlLog {
-    private static WebDriver driver;
+public class HtmlLog extends UIUtils {
     public static String g_sFileName = "";
     public static String g_iCapture_Count = "";// 'Number of Image capture
     public static int g_iImage_Capture;//=""; //'Flag for Image Capture in Result File
@@ -42,7 +46,7 @@ public class HtmlLog {
 
     }
 
-    public void summaryInitialization(String strSummaryReportName) {
+    public static void summaryInitialization(String strSummaryReportName) {
         Date d = new Date();
         TestNGRunner.properties.setProperty("ResultsFolderPath", TestNGRunner.properties.getProperty("resultFolderName"));
         String summaryFileName = TestNGRunner.properties.getProperty("ResultsFolderPath")+"\\" + strSummaryReportName  +d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
@@ -51,7 +55,7 @@ public class HtmlLog {
         summaryInsertSection(); //'TestCaseID,Scenario Name and Result
     }
 
-    public void summaryOpenHtmlFile(String sSection) {
+    public static void summaryOpenHtmlFile(String sSection) {
         g_iPass_Count=0;
         g_iFail_Count=0;
         g_sFileName = "sScriptName";
@@ -85,7 +89,7 @@ public class HtmlLog {
         g_sSection=sSection;
     }
 
-    public void summaryInsertSection() {
+    public static void summaryInsertSection() {
 
         String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
 
@@ -101,7 +105,7 @@ public class HtmlLog {
         }
     }
 
-    public void initilization(String BprocessName) {
+    public static void initilization(String BprocessName) {
         Date d = new Date();
         String fileName = TestNGRunner.properties.getProperty("ResultsFolderPath") + "\\" + BprocessName + d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
         //TestNGRunner.properties.setProperty("FileName", fileName);
@@ -113,7 +117,7 @@ public class HtmlLog {
         insertTestCaseName("");
     }
 
-    public void openHtmlFile(String sSection) {
+    public static void openHtmlFile(String sSection) {
         g_iPass_Count=0;
         g_iFail_Count=0;
         g_sFileName = "sScriptName";
@@ -147,7 +151,7 @@ public class HtmlLog {
         g_sSection=sSection;
     }
 
-    public void insertSection() {
+    public static void insertSection() {
         Date d = new Date();
         String gsTempFile = VariableManager.getInstance().getVariablesManager().getObject("FileName");
         Path objPath=Paths.get(gsTempFile);
@@ -165,7 +169,7 @@ public class HtmlLog {
         }
     }
 
-    public void insertTestCaseName(String sDesc) {
+    public static void insertTestCaseName(String sDesc) {
         Date d = new Date();
         String gsTempFile = VariableManager.getInstance().getVariablesManager().getObject("FileName");
         Path objPath=Paths.get(gsTempFile);
@@ -182,7 +186,8 @@ public class HtmlLog {
         g_Flag = 0;
     }
 
-    public void insertResult(String sTestCaseName, String sDesc, String sExpected, String sActual, String sResult){
+    public static void insertResult(String sTestCaseName, String sDesc, String sExpected, String sActual, String sResult){
+        WebDriver driver = ManagerDriver.getInstance().getWebDriver();
         g_Flag1=1;
         Date d = new Date();
         String gsTempFile = VariableManager.getInstance().getVariablesManager().getObject("FileName");
@@ -195,7 +200,7 @@ public class HtmlLog {
                     if (TestNGRunner.properties.getProperty("CaptureScreenShotforPass").equalsIgnoreCase("YES")) {
                         String I_sFile="";
                         g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = TestNGRunner.properties.getProperty("FolderName") + "\\Screen" + g_iCapture_Count + ".png";
+                        I_sFile = TestNGRunner.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".png";
                         if(driver != null) {
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
@@ -213,7 +218,7 @@ public class HtmlLog {
                     if (TestNGRunner.properties.getProperty("CaptureScreenShotforFail").equalsIgnoreCase("YES")) {
                         String I_sFile="";
                         g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = TestNGRunner.properties.getProperty("FolderName") + "\\Screen" + g_iCapture_Count + ".png";
+                        I_sFile = TestNGRunner.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + g_iCapture_Count + ".png";
                         if(driver != null) {
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
@@ -228,7 +233,7 @@ public class HtmlLog {
                     if (TestNGRunner.properties.getProperty("CaptureScreenShotforWarning").equalsIgnoreCase("YES")) {
                         String I_sFile="";
                         g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = TestNGRunner.properties.getProperty("FolderName") + "\\Screen" + g_iCapture_Count + ".jpeg";
+                        I_sFile = TestNGRunner.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".jpeg";
                         if(driver != null){
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
@@ -246,7 +251,7 @@ public class HtmlLog {
         }
     }
 
-    public synchronized void  summaryInsertTestCase() {
+    public static synchronized void  summaryInsertTestCase() {
         //System.out.println(TestNGRunner.properties.getProperty("FileName"));
         Date d = new Date();
         String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
@@ -303,7 +308,7 @@ public class HtmlLog {
         }
     }
 
-    public void summaryCloseHtml(String strRelease) {
+    public static void summaryCloseHtml(String strRelease) {
         Date d = new Date();
         String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
         Path objPath=Paths.get(gsTempFile);
@@ -335,5 +340,12 @@ public class HtmlLog {
                 e.printStackTrace();
             }
         }
+
+        String sendMail = TestNGRunner.properties.getProperty("SendMail");
+        if (sendMail.contains("YES")) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SendMail(TestNGRunner.properties.getProperty("MailTo"), TestNGRunner.properties.getProperty("MailCC"), gsTempFile, formatter.format(g_tSummaryEnd_Time), formatter.format(g_tSummaryStart_Time), strRelease, TestNGRunner.properties.getProperty("ModuleName"), String.valueOf(g_SummaryTotal_TC), String.valueOf(g_SummaryTotal_Pass), String.valueOf(g_SummaryTotal_Fail), TestNGRunner.properties.getProperty("Region"));
+        }
+
     }
 }
