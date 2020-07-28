@@ -8,15 +8,16 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import com.open.hotel.runner.TestNGRunner;
 import org.openqa.selenium.WebDriver;
-import sun.plugin.util.UIUtil;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class HtmlLog extends UIUtils {
@@ -25,7 +26,6 @@ public class HtmlLog extends UIUtils {
     public static int g_iImage_Capture;//=""; //'Flag for Image Capture in Result File
     public static int g_iPass_Count = 0; //'Pass Count
     public static int g_iFail_Count;//=0; //'Fail Count
-    public static Date g_tStart_Time; //'Start Time
     public static int g_Total_TC;//=0;
     public static int g_Total_Pass;//=0;
     public static int g_Total_Fail;//=0;
@@ -33,8 +33,11 @@ public class HtmlLog extends UIUtils {
     public static int g_Flag1;//=0;
     public static Date g_tSummaryStart_Time;// 'Start Time
     public static Date g_tSummaryEnd_Time; //'End Time
+
+    //public static Date g_tStart_Time; //'Start Time
     public static Date g_tSummaryTCStart_Time; //'Start time for each test case in Summary Report
     public static Date g_tSummaryTCEnd_Time; //'Start time for each test case in Summary Report
+
     public static int g_SummaryTotal_TC;//=0;
     public static int g_SummaryTotal_Pass;//=0;
     public static int g_SummaryTotal_Fail;//=0;
@@ -85,7 +88,7 @@ public class HtmlLog extends UIUtils {
             e.printStackTrace();
         }
         g_tSummaryStart_Time = d;
-        g_tSummaryTCStart_Time = d;
+        //g_tSummaryTCStart_Time = d;
         g_sSection=sSection;
     }
 
@@ -107,10 +110,15 @@ public class HtmlLog extends UIUtils {
 
     public static void initilization(String BprocessName) {
         Date d = new Date();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now));
+        g_tSummaryTCStart_Time = d;
+        VariableManager.getInstance().getVariablesManager().setObject("g_tSummaryTCStart_Time",dtf.format(now).toString());
+
         String fileName = TestNGRunner.properties.getProperty("ResultsFolderPath") + "\\" + BprocessName + d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
         //TestNGRunner.properties.setProperty("FileName", fileName);
         VariableManager.getInstance().getVariablesManager().setObject("FileName",fileName);
-
 
         openHtmlFile(BprocessName);
         insertSection();
@@ -133,7 +141,6 @@ public class HtmlLog extends UIUtils {
         Date d = new Date();
         String gsTempFile = VariableManager.getInstance().getVariablesManager().getObject("FileName");
         Path objPath=Paths.get(gsTempFile);
-        //if(Files.exists(objPath)) {
             FileWriter objFile= null;
             try {
                 objFile = new FileWriter(gsTempFile,true);
@@ -146,8 +153,6 @@ public class HtmlLog extends UIUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        //}
-        g_tStart_Time = d;
         g_sSection=sSection;
     }
 
@@ -251,9 +256,25 @@ public class HtmlLog extends UIUtils {
         }
     }
 
-    public static synchronized void  summaryInsertTestCase() {
-        //System.out.println(TestNGRunner.properties.getProperty("FileName"));
+    public static synchronized void  summaryInsertTestCase() throws ParseException {
+        //Date g_tSummaryTCEnd_Time = null;
         Date d = new Date();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now));
+        g_tSummaryTCEnd_Time = d;
+        //VariableManager.getInstance().getVariablesManager().setObject("g_tSummaryTCEnd_Time", dtf.format(now).toString());
+
+        String intDateDiff = "";
+        //long diff = g_tSummaryTCEnd_Time.getTime() - g_tSummaryTCStart_Time.getTime();
+        //String end = VariableManager.getInstance().getVariablesManager().getObject("g_tSummaryTCEnd_Time");
+        String start = VariableManager.getInstance().getVariablesManager().getObject("g_tSummaryTCStart_Time");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        //Date end1 = formatter.parse(end);
+        Date start1 = formatter.parse(start);
+
+        long diff = g_tSummaryTCEnd_Time.getTime() - start1.getTime();
+
         String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
         Path objPath=Paths.get(gsTempFile);
         g_SummaryTotal_TC = g_SummaryTotal_TC+1;
@@ -263,7 +284,8 @@ public class HtmlLog extends UIUtils {
         else {
             g_SummaryTotal_Fail = g_SummaryTotal_Fail+1;
         }
-        g_tSummaryTCEnd_Time = d;
+
+
         String strStatus="";
         switch (g_SummaryFlag) {
             case 0:
@@ -276,8 +298,7 @@ public class HtmlLog extends UIUtils {
                 strStatus = "FAILED";
                 break;
         }
-        String intDateDiff = "";
-        long diff = g_tSummaryTCEnd_Time.getTime() - g_tSummaryTCStart_Time.getTime();
+
         long intDateDiff1 = diff / (60 * 1000) % 60;
         if (intDateDiff1 == 0){
             intDateDiff1 = diff / 1000 % 60;
@@ -346,6 +367,6 @@ public class HtmlLog extends UIUtils {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SendMail(TestNGRunner.properties.getProperty("MailTo"), TestNGRunner.properties.getProperty("MailCC"), gsTempFile, formatter.format(g_tSummaryEnd_Time), formatter.format(g_tSummaryStart_Time), strRelease, TestNGRunner.properties.getProperty("ModuleName"), String.valueOf(g_SummaryTotal_TC), String.valueOf(g_SummaryTotal_Pass), String.valueOf(g_SummaryTotal_Fail), TestNGRunner.properties.getProperty("Region"));
         }
-
     }
+
 }

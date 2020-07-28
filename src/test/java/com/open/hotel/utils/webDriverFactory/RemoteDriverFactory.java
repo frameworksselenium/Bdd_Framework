@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class RemoteDriverFactory {
@@ -28,6 +29,7 @@ public class RemoteDriverFactory {
 				options.addArguments("start-maximized");
 				options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
 				options.setExperimentalOption("useAutomationExtension", false);
+				options.setExperimentalOption("excludeSwitches", Arrays.asList("disable-popup-blocking"));
 				cap = DesiredCapabilities.chrome();
 				cap.setCapability(ChromeOptions.CAPABILITY, options);
 				cap.setBrowserName("chrome");

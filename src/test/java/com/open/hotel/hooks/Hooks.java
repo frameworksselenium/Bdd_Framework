@@ -11,12 +11,15 @@ import com.open.hotel.utils.webDriverFactory.RemoteDriverFactory;
 import com.open.hotel.utils.threadLevelVariables.VariableManager;
 import com.open.hotel.utils.threadLevelVariables.Variables;
 import com.open.hotel.runner.TestNGRunner;
+
+import java.text.ParseException;
+
 public class Hooks{
 
 	@Before()
 	public void beforeScenario(Scenario scenario){
 
-		String ExecutionMode = "Local";
+		String ExecutionMode = TestNGRunner.properties.getProperty("ExecutionMode");
 		WebDriver driver = null;
 		if (ExecutionMode.contains("Local")) {
 			driver = LocalDriverFactory.getInstance().createNewDriver();
@@ -25,14 +28,11 @@ public class Hooks{
 		}
 		ManagerDriver.getInstance().setWebDriver(driver);
 
-
 		String testCaseName = scenario.getName().split(":")[1];
 		String testCaseID = scenario.getName().split(":")[0];
 
-
 		Variables variables = new Variables();
 		VariableManager.getInstance().setVariablesManager(variables);
-
 
 		VariableManager.getInstance().getVariablesManager().setObject("testCaseID",testCaseID);
 		VariableManager.getInstance().getVariablesManager().setObject("testCaseName",testCaseName);
@@ -41,7 +41,7 @@ public class Hooks{
 	}
 			
 	@After()
-	public void afterScenario(Scenario scenario) {
+	public void afterScenario(Scenario scenario) throws ParseException {
 		HtmlLog.summaryInsertTestCase();
 		WebDriver driver = ManagerDriver.getInstance().getWebDriver();
 		if(driver != null){
