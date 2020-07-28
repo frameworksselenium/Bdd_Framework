@@ -1,5 +1,6 @@
 package com.open.hotel.hooks;
 
+import com.open.hotel.utils.LoggerClass;
 import com.open.hotel.utils.html.HtmlLog;
 import com.open.hotel.utils.webDriverFactory.LocalDriverFactory;
 import com.open.hotel.utils.webDriverFactory.ManagerDriver;
@@ -19,7 +20,7 @@ public class Hooks{
 	@Before()
 	public void beforeScenario(Scenario scenario){
 
-		String ExecutionMode = TestNGRunner.properties.getProperty("ExecutionMode");
+	/*	String ExecutionMode = TestNGRunner.properties.getProperty("ExecutionMode");
 		WebDriver driver = null;
 		if (ExecutionMode.contains("Local")) {
 			driver = LocalDriverFactory.getInstance().createNewDriver();
@@ -27,7 +28,7 @@ public class Hooks{
 			driver = RemoteDriverFactory.getInstance().createNewDriver();
 		}
 		ManagerDriver.getInstance().setWebDriver(driver);
-
+*/
 		String testCaseName = scenario.getName().split(":")[1];
 		String testCaseID = scenario.getName().split(":")[0];
 
@@ -36,6 +37,8 @@ public class Hooks{
 
 		VariableManager.getInstance().getVariablesManager().setObject("testCaseID",testCaseID);
 		VariableManager.getInstance().getVariablesManager().setObject("testCaseName",testCaseName);
+		org.apache.log4j.Logger log = LoggerClass.getThreadLogger("Thread" + Thread.currentThread().getName(), VariableManager.getInstance().getVariablesManager().getObject("testCaseID"));
+		log.info("Thread ID:'" + Thread.currentThread().getId() + "' 'PASS'");
 
 		HtmlLog.initilization(testCaseName);
 	}

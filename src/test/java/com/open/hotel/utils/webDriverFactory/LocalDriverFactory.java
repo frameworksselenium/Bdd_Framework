@@ -1,6 +1,7 @@
 package com.open.hotel.utils.webDriverFactory;
 
 import com.open.hotel.runner.TestNGRunner;
+import com.open.hotel.utils.loadConfig.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,7 +21,7 @@ public class LocalDriverFactory {
 
 	public WebDriver createNewDriver() {
 		WebDriver driver = null;
-		String browser = TestNGRunner.properties.getProperty("Browser");
+		String browser = Config.properties.getProperty("Browser");
 			String driverPath = System.getProperty("user.dir");
 			if (browser.toUpperCase().contains("CH")) {
 				System.setProperty("webdriver.chrome.driver", driverPath + "\\src\\test\\resources\\drivers\\chromedriver.exe");

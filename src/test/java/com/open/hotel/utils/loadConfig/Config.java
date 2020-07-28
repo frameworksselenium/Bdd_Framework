@@ -9,6 +9,10 @@ import java.util.Properties;
 public class Config {
     public static Properties properties = null;
 
+    static {
+        properties = Config.init();
+
+    }
     public static Properties init(){
 
         properties = new Properties();

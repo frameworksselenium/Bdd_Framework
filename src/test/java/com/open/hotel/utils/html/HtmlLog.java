@@ -6,7 +6,7 @@ import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import com.open.hotel.runner.TestNGRunner;
+import com.open.hotel.utils.loadConfig.Config;
 import org.openqa.selenium.WebDriver;
 import java.io.File;
 import java.io.FileWriter;
@@ -51,9 +51,9 @@ public class HtmlLog extends UIUtils {
 
     public static void summaryInitialization(String strSummaryReportName) {
         Date d = new Date();
-        TestNGRunner.properties.setProperty("ResultsFolderPath", TestNGRunner.properties.getProperty("resultFolderName"));
-        String summaryFileName = TestNGRunner.properties.getProperty("ResultsFolderPath")+"\\" + strSummaryReportName  +d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
-        TestNGRunner.properties.setProperty("SummaryFileName", summaryFileName);
+        Config.properties.setProperty("ResultsFolderPath", Config.properties.getProperty("resultFolderName"));
+        String summaryFileName = Config.properties.getProperty("ResultsFolderPath")+"\\" + strSummaryReportName  +d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
+        Config.properties.setProperty("SummaryFileName", summaryFileName);
         summaryOpenHtmlFile(strSummaryReportName);// 'logo, heading
         summaryInsertSection(); //'TestCaseID,Scenario Name and Result
     }
@@ -68,10 +68,10 @@ public class HtmlLog extends UIUtils {
         g_SummaryFlag = 0;
         g_ScriptName="sScriptName";
         Date d = new Date();
-        String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
+        String gsTempFile = Config.properties.getProperty("SummaryFileName");
         if(gsTempFile ==null) {
-            //gsTempFile = TestNGRunner.properties.getProperty("SummaryFolderName1") +d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
-            //TestNGRunner.properties.setProperty("SummaryFileName",gsTempFile);
+            //gsTempFile = Config.properties.getProperty("SummaryFolderName1") +d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
+            //Config.properties.setProperty("SummaryFileName",gsTempFile);
         }
         Path objPath = Paths.get(gsTempFile);
         FileWriter objFile= null;
@@ -79,7 +79,7 @@ public class HtmlLog extends UIUtils {
             objFile = new FileWriter(gsTempFile,true);
 
             objFile.write("<HTML><BODY><TABLE BORDER=0 CELLPADDING=3 CELLSPACING=1 WIDTH=100%>");
-            objFile.write("<TR COLS=2><TD BGCOLOR=WHITE WIDTH=6%><IMG SRC='https://www.capgemini.com/sites/all/themes/capgemini/logo.png'></TD><TD WIDTH=94% BGCOLOR=WHITE><FONT FACE=VERDANA COLOR=NAVY SIZE=3><B>&nbsp;Automation Test Results<BR/><FONT FACE=VERDANA COLOR=SILVER SIZE=2>&nbsp; Date: " + d +"</BR>&nbsp;On Machine :" + TestNGRunner.properties.getProperty("LocalHostName") + "</B></FONT></TD><TD BGCOLOR=WHITE WIDTH=6%><IMG SRC='https://www.capgemini.com/sites/all/themes/capgemini/logo.png'></TD></TR></TABLE>");
+            objFile.write("<TR COLS=2><TD BGCOLOR=WHITE WIDTH=6%><IMG SRC='https://www.capgemini.com/sites/all/themes/capgemini/logo.png'></TD><TD WIDTH=94% BGCOLOR=WHITE><FONT FACE=VERDANA COLOR=NAVY SIZE=3><B>&nbsp;Automation Test Results<BR/><FONT FACE=VERDANA COLOR=SILVER SIZE=2>&nbsp; Date: " + d +"</BR>&nbsp;On Machine :" + Config.properties.getProperty("LocalHostName") + "</B></FONT></TD><TD BGCOLOR=WHITE WIDTH=6%><IMG SRC='https://www.capgemini.com/sites/all/themes/capgemini/logo.png'></TD></TR></TABLE>");
             objFile.write("<TABLE BORDER=0 BGCOLOR=BLACK CELLPADDING=3 CELLSPACING=1 WIDTH=100%>");
             objFile.write("<TR><TD BGCOLOR=#66699 WIDTH=15%><FONT FACE=VERDANA COLOR=WHITE SIZE=2><B>Module Name:</B></FONT></TD><TD COLSPAN=6 BGCOLOR=#66699 ><FONT FACE=VERDANA COLOR=WHITE SIZE=2><B>" + sSection + "</B></FONT></TD></TR>");
             objFile.write("</TABLE></BODY></HTML>");
@@ -94,7 +94,7 @@ public class HtmlLog extends UIUtils {
 
     public static void summaryInsertSection() {
 
-        String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
+        String gsTempFile = Config.properties.getProperty("SummaryFileName");
 
         Path objPath=Paths.get(gsTempFile);
         FileWriter objFile= null;
@@ -116,8 +116,8 @@ public class HtmlLog extends UIUtils {
         g_tSummaryTCStart_Time = d;
         VariableManager.getInstance().getVariablesManager().setObject("g_tSummaryTCStart_Time",dtf.format(now).toString());
 
-        String fileName = TestNGRunner.properties.getProperty("ResultsFolderPath") + "\\" + BprocessName + d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
-        //TestNGRunner.properties.setProperty("FileName", fileName);
+        String fileName = Config.properties.getProperty("ResultsFolderPath") + "\\" + BprocessName + d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
+        //Config.properties.setProperty("FileName", fileName);
         VariableManager.getInstance().getVariablesManager().setObject("FileName",fileName);
 
         openHtmlFile(BprocessName);
@@ -202,10 +202,10 @@ public class HtmlLog extends UIUtils {
                 FileWriter objFile=new FileWriter(gsTempFile,true);
                 if(sResult.toUpperCase()=="PASS") {
                     g_iPass_Count = g_iPass_Count + 1;
-                    if (TestNGRunner.properties.getProperty("CaptureScreenShotforPass").equalsIgnoreCase("YES")) {
+                    if (Config.properties.getProperty("CaptureScreenShotforPass").equalsIgnoreCase("YES")) {
                         String I_sFile="";
                         g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = TestNGRunner.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".png";
+                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".png";
                         if(driver != null) {
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
@@ -220,10 +220,10 @@ public class HtmlLog extends UIUtils {
                     g_Flag = 1;
                     g_SummaryFlag = 1;
                     g_iFail_Count = g_iFail_Count + 1;
-                    if (TestNGRunner.properties.getProperty("CaptureScreenShotforFail").equalsIgnoreCase("YES")) {
+                    if (Config.properties.getProperty("CaptureScreenShotforFail").equalsIgnoreCase("YES")) {
                         String I_sFile="";
                         g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = TestNGRunner.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + g_iCapture_Count + ".png";
+                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + g_iCapture_Count + ".png";
                         if(driver != null) {
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
@@ -235,10 +235,10 @@ public class HtmlLog extends UIUtils {
                     }
                 }
                 else if(sResult.toUpperCase()=="WARNING") {
-                    if (TestNGRunner.properties.getProperty("CaptureScreenShotforWarning").equalsIgnoreCase("YES")) {
+                    if (Config.properties.getProperty("CaptureScreenShotforWarning").equalsIgnoreCase("YES")) {
                         String I_sFile="";
                         g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = TestNGRunner.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".jpeg";
+                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".jpeg";
                         if(driver != null){
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
@@ -275,7 +275,7 @@ public class HtmlLog extends UIUtils {
 
         long diff = g_tSummaryTCEnd_Time.getTime() - start1.getTime();
 
-        String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
+        String gsTempFile = Config.properties.getProperty("SummaryFileName");
         Path objPath=Paths.get(gsTempFile);
         g_SummaryTotal_TC = g_SummaryTotal_TC+1;
         if (g_SummaryFlag==0) {
@@ -331,7 +331,7 @@ public class HtmlLog extends UIUtils {
 
     public static void summaryCloseHtml(String strRelease) {
         Date d = new Date();
-        String gsTempFile = TestNGRunner.properties.getProperty("SummaryFileName");
+        String gsTempFile = Config.properties.getProperty("SummaryFileName");
         Path objPath=Paths.get(gsTempFile);
 
         g_tSummaryEnd_Time = d;
@@ -362,10 +362,10 @@ public class HtmlLog extends UIUtils {
             }
         }
 
-        String sendMail = TestNGRunner.properties.getProperty("SendMail");
+        String sendMail = Config.properties.getProperty("SendMail");
         if (sendMail.contains("YES")) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SendMail(TestNGRunner.properties.getProperty("MailTo"), TestNGRunner.properties.getProperty("MailCC"), gsTempFile, formatter.format(g_tSummaryEnd_Time), formatter.format(g_tSummaryStart_Time), strRelease, TestNGRunner.properties.getProperty("ModuleName"), String.valueOf(g_SummaryTotal_TC), String.valueOf(g_SummaryTotal_Pass), String.valueOf(g_SummaryTotal_Fail), TestNGRunner.properties.getProperty("Region"));
+            SendMail(Config.properties.getProperty("MailTo"), Config.properties.getProperty("MailCC"), gsTempFile, formatter.format(g_tSummaryEnd_Time), formatter.format(g_tSummaryStart_Time), strRelease, Config.properties.getProperty("ModuleName"), String.valueOf(g_SummaryTotal_TC), String.valueOf(g_SummaryTotal_Pass), String.valueOf(g_SummaryTotal_Fail), Config.properties.getProperty("Region"));
         }
     }
 

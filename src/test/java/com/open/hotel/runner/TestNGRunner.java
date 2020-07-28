@@ -7,7 +7,6 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import io.cucumber.testng.CucumberOptions;
-import java.util.Properties;
 
 @CucumberOptions(
 		plugin={
@@ -23,27 +22,24 @@ import java.util.Properties;
 )
 public class TestNGRunner extends AbstractTestNGCucumberTests {
 
-	public static Properties properties = null;
+	//public static Properties properties = null;
 	@Override
 	@DataProvider (parallel = true)
 	public Object[][] scenarios() {
-
 		return super.scenarios();
 	}
 
 	@BeforeSuite()
 	public void setup(){
-		properties = Config.init();
-		Config.createFolder(properties.getProperty("resultFolder"));
-		Config.createFolder(properties.getProperty("resultFolderName"));
+		//properties = Config.init();
+		Config.createFolder(Config.properties.getProperty("resultFolder"));
+		Config.createFolder(Config.properties.getProperty("resultFolderName"));
 		HtmlLog.summaryInitialization("ExecutionSummaryReport");
-
 	}
 
 	@AfterSuite()
 	public void tearDown(){
-
-		HtmlLog.summaryCloseHtml(properties.getProperty("Release"));
+		HtmlLog.summaryCloseHtml(Config.properties.getProperty("Release"));
 	}
 
 }

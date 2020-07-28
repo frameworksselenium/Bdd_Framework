@@ -2,8 +2,8 @@ package com.open.hotel.utils;
 
 import com.open.hotel.runner.TestNGRunner;
 import com.open.hotel.utils.html.HtmlLog;
+import com.open.hotel.utils.loadConfig.Config;
 import com.open.hotel.utils.threadLevelVariables.VariableManager;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -16,34 +16,39 @@ import java.util.concurrent.TimeUnit;
 
 public class UIUtils {
 
+    org.apache.log4j.Logger log = LoggerClass.getThreadLogger("Thread" + Thread.currentThread().getName(), VariableManager.getInstance().getVariablesManager().getObject("testCaseID"));
+
     public UIUtils(){
 
     }
     public void type(WebElement element, String value, String elementName, String page){
         try{
-            boolean elementClickable = WaitUntilClickable(element, Integer.valueOf(TestNGRunner.properties.getProperty("LONGWAIT")));
+            boolean elementClickable = WaitUntilClickable(element, Integer.valueOf(Config.properties.getProperty("LONGWAIT")));
             highlightElement(element);
-            //MouseMoveToElement(element);
+            MouseMoveToElement(element);
             //scrollToElement(element);
             element.sendKeys(value);
+            log.info("Thread ID:'" + Thread.currentThread().getId() + "' 'PASS' Entered value '" + value + "' in '" + elementName + "' text box");
             HtmlLog.insertResult(VariableManager.getInstance().getVariablesManager().getObject("testCaseID"), "ThreadID: " + String.valueOf(Thread.currentThread().getId()), "Enter value '" + value + "' in '" + elementName + "' text box", "Entered value '" + value + "' in '" + elementName + "' text box","PASS");
         }catch(Exception e){
             HtmlLog.insertResult(VariableManager.getInstance().getVariablesManager().getObject("testCaseID"), "ThreadID: " + String.valueOf(Thread.currentThread().getId()), "Enter value '" + value + "' in '" + elementName + "' text box", "Not Entered value '" + value + "' in '" + elementName + "' text box","FAIL");
-            //Assert.fail(e.getMessage());
+            log.info("Thread ID:'" + Thread.currentThread().getId() + "' 'FAIL' " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     public void clickElement(WebElement element, String elementName, String page){
         try{
-            boolean elementClickable = WaitUntilClickable(element, Integer.valueOf(TestNGRunner.properties.getProperty("LONGWAIT")));
+            boolean elementClickable = WaitUntilClickable(element, Integer.valueOf(Config.properties.getProperty("LONGWAIT")));
             highlightElement(element);
-            //MouseMoveToElement(element);
+            MouseMoveToElement(element);
             //scrollToElement(element);
             element.click();
+            log.info("Thread ID:'" + Thread.currentThread().getId() + "' 'PASS' Clicked on '" + elementName + "' button");
             HtmlLog.insertResult(VariableManager.getInstance().getVariablesManager().getObject("testCaseID"), "ThreadID: " + String.valueOf(Thread.currentThread().getId()), "Click on '" + elementName + "' button", "Clicked on '" + elementName + "' button", "PASS");
         }catch(Exception e){
             HtmlLog.insertResult(VariableManager.getInstance().getVariablesManager().getObject("testCaseID"), "ThreadID: " + String.valueOf(Thread.currentThread().getId()), "Click on '" + elementName + "' button", "not Clicked on '" + elementName + "' button", "FAIL");
+            log.info("Thred ID:'" + Thread.currentThread().getId() + "' 'FAIL' " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
