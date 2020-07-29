@@ -1,4 +1,4 @@
-package com.open.hotel.utils.loadConfig;
+package com.open.abddf.loadConfig;
 
 import java.io.File;
 import java.io.FileInputStream;

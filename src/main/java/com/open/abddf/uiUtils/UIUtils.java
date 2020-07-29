@@ -1,15 +1,15 @@
-package com.open.hotel.utils;
+package com.open.abddf.uiUtils;
 
-import com.open.hotel.runner.TestNGRunner;
-import com.open.hotel.utils.html.HtmlLog;
-import com.open.hotel.utils.loadConfig.Config;
-import com.open.hotel.utils.threadLevelVariables.VariableManager;
+import com.open.abddf.Logger.LoggerClass;
+import com.open.abddf.html.HtmlLog;
+import com.open.abddf.loadConfig.Config;
+import com.open.abddf.threadLevelVariables.VariableManager;
+import com.open.abddf.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import com.open.hotel.utils.webDriverFactory.ManagerDriver;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -69,7 +69,7 @@ public class UIUtils {
 
     public static void SendMail(String strMailTo, String strMailCC, String strSummaryFileName, String g_tSummaryEnd_Time, String g_tSummaryStart_Time, String strRelease, String strModuleName, String g_SummaryTotal_TC, String g_SummaryTotal_Pass, String g_SummaryTotal_Fail, String strEnvironment) {
         File directory = new File(".");
-        String sConfigfilespath = System.getProperty("user.dir") + "\\src\\test\\resources\\VBScript\\SendMail.vbs";
+        String sConfigfilespath = System.getProperty("user.dir") + "\\src\\main\\java\\com\\open\\abddf\\vbScript\\SendMail.vbs";
         try {
             String[] parms = { "wscript", sConfigfilespath, strMailTo, strMailCC, strSummaryFileName, g_tSummaryEnd_Time, g_tSummaryStart_Time, strRelease, strModuleName, g_SummaryTotal_TC, g_SummaryTotal_Pass, g_SummaryTotal_Fail, strEnvironment };
             // Runtime.getRuntime().exec(parms);

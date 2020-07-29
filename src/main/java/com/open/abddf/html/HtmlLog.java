@@ -1,13 +1,14 @@
-package com.open.hotel.utils.html;
+package com.open.abddf.html;
 
-import com.open.hotel.utils.UIUtils;
-import com.open.hotel.utils.threadLevelVariables.VariableManager;
-import com.open.hotel.utils.webDriverFactory.ManagerDriver;
+import com.open.abddf.uiUtils.UIUtils;
+import com.open.abddf.loadConfig.Config;
+import com.open.abddf.threadLevelVariables.VariableManager;
+import com.open.abddf.webDriverFactory.ManagerDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import com.open.hotel.utils.loadConfig.Config;
 import org.openqa.selenium.WebDriver;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -116,9 +117,12 @@ public class HtmlLog extends UIUtils {
         g_tSummaryTCStart_Time = d;
         VariableManager.getInstance().getVariablesManager().setObject("g_tSummaryTCStart_Time",dtf.format(now).toString());
 
-        String fileName = Config.properties.getProperty("ResultsFolderPath") + "\\" + BprocessName + d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
-        //Config.properties.setProperty("FileName", fileName);
+        String testCaseNameWithTimeStamp = "\\" + BprocessName + d.getYear() + d.getMonth() + d.getDay() + "_" + d.getHours() + d.getMinutes() + d.getSeconds()+ ".htm";
+        String fileName = Config.properties.getProperty("ResultsFolderPath") + testCaseNameWithTimeStamp;
         VariableManager.getInstance().getVariablesManager().setObject("FileName",fileName);
+
+        String linkFileName = "." + testCaseNameWithTimeStamp;
+        VariableManager.getInstance().getVariablesManager().setObject("linkFileName",linkFileName);
 
         openHtmlFile(BprocessName);
         insertSection();
@@ -195,6 +199,7 @@ public class HtmlLog extends UIUtils {
         WebDriver driver = ManagerDriver.getInstance().getWebDriver();
         g_Flag1=1;
         Date d = new Date();
+        String imageNameLink = null;
         String gsTempFile = VariableManager.getInstance().getVariablesManager().getObject("FileName");
         Path objPath=Paths.get(gsTempFile);
         try{
@@ -204,13 +209,14 @@ public class HtmlLog extends UIUtils {
                     g_iPass_Count = g_iPass_Count + 1;
                     if (Config.properties.getProperty("CaptureScreenShotforPass").equalsIgnoreCase("YES")) {
                         String I_sFile="";
-                        g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".png";
+                        g_iCapture_Count = "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + d.getHours() +d.getMinutes() + d.getSeconds() + ".png";
+                        imageNameLink = ".\\" + g_iCapture_Count;
+                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + g_iCapture_Count;
                         if(driver != null) {
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
                         }
-                        objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=WINGDINGS SIZE=4>2></FONT><FONT FACE=VERDANA SIZE=2><A HREF='" + I_sFile +"'>" + sActual + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + sResult + "</B></FONT></TD></TR>");
+                        objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=WINGDINGS SIZE=4>2></FONT><FONT FACE=VERDANA SIZE=2><A HREF='" + imageNameLink +"'>" + sActual + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + sResult + "</B></FONT></TD></TR>");
                     }
                     else {
                         objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sActual + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + sResult + "</B></FONT></TD></TR>");
@@ -222,13 +228,14 @@ public class HtmlLog extends UIUtils {
                     g_iFail_Count = g_iFail_Count + 1;
                     if (Config.properties.getProperty("CaptureScreenShotforFail").equalsIgnoreCase("YES")) {
                         String I_sFile="";
-                        g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + g_iCapture_Count + ".png";
+                        g_iCapture_Count = "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + d.getHours() +d.getMinutes() + d.getSeconds() + ".png";
+                        imageNameLink = ".\\" + g_iCapture_Count;
+                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + g_iCapture_Count;
                         if(driver != null) {
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
                         }
-                        objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=WINGDINGS SIZE=4>2></FONT><FONT FACE=VERDANA SIZE=2><A HREF='" + I_sFile +"'>" + sActual + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=RED><B>" + sResult + "</B></FONT></TD></TR>");
+                        objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=WINGDINGS SIZE=4>2></FONT><FONT FACE=VERDANA SIZE=2><A HREF='" + imageNameLink +"'>" + sActual + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=RED><B>" + sResult + "</B></FONT></TD></TR>");
                     }
                     else {
                         objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sActual + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=RED><B>" + sResult + "</B></FONT></TD></TR>");
@@ -237,13 +244,14 @@ public class HtmlLog extends UIUtils {
                 else if(sResult.toUpperCase()=="WARNING") {
                     if (Config.properties.getProperty("CaptureScreenShotforWarning").equalsIgnoreCase("YES")) {
                         String I_sFile="";
-                        g_iCapture_Count="Screen" + d.getHours() +d.getMinutes() + d.getSeconds();
-                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "\\Screen" + g_iCapture_Count + ".jpeg";
+                        g_iCapture_Count = "\\" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "_Screen" + d.getHours() +d.getMinutes() + d.getSeconds() + ".png";
+                        imageNameLink = ".\\" + g_iCapture_Count;
+                        I_sFile = Config.properties.getProperty("resultFolderName") + "\\" + g_iCapture_Count;
                         if(driver != null){
                             File scrFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
                             FileUtils.copyFile(scrFile, new File(I_sFile));
                         }
-                        objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=WINGDINGS SIZE=4>2></FONT><FONT FACE=VERDANA SIZE=2><A HREF='" + I_sFile +"'>" + sActual + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + sResult + "</B></FONT></TD></TR>");
+                        objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=WINGDINGS SIZE=4>2></FONT><FONT FACE=VERDANA SIZE=2><A HREF='" + imageNameLink +"'>" + sActual + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + sResult + "</B></FONT></TD></TR>");
                     }
                     else {
                         objFile.write("<TR COLS=5><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sTestCaseName + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA SIZE=2>" + sDesc + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sExpected +"</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=30%><FONT FACE=VERDANA SIZE=2>" + sActual + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE='WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + sResult + "</B></FONT></TD></TR>");
@@ -315,10 +323,10 @@ public class HtmlLog extends UIUtils {
                 objFile = new FileWriter(gsTempFile,true);
 
                 if(strStatus.toUpperCase()== "PASSED") {
-                    objFile.write("<TR COLS=6><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseID") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=45%><FONT FACE=VERDANA COLOR=BLACK SIZE=2><A HREF='" + VariableManager.getInstance().getVariablesManager().getObject("FileName") + "'>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=20%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + intDateDiff + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + strStatus + "</B></FONT></TD></TR>");
+                    objFile.write("<TR COLS=6><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseID") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=45%><FONT FACE=VERDANA COLOR=BLACK SIZE=2><A HREF='" + VariableManager.getInstance().getVariablesManager().getObject("linkFileName") + "'>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=20%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + intDateDiff + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=WINGDINGS 2' SIZE=5 COLOR=GREEN>P</FONT><FONT FACE=VERDANA SIZE=2 COLOR=GREEN><B>" + strStatus + "</B></FONT></TD></TR>");
                 }
                 else if (strStatus.toUpperCase()== "FAILED") {
-                    objFile.write("<TR COLS=6><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseID") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=45%><FONT FACE=VERDANA COLOR=BLACK SIZE=2><A HREF='" + VariableManager.getInstance().getVariablesManager().getObject("FileName") + "'>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=20%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + intDateDiff + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=WINGDINGS 2' SIZE=5 COLOR=RED>O</FONT><FONT FACE=VERDANA SIZE=2 COLOR=RED><B>" + strStatus + "</B></FONT></TD></TR>");
+                    objFile.write("<TR COLS=6><TD BGCOLOR=#EEEEEE WIDTH=15%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseID") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=45%><FONT FACE=VERDANA COLOR=BLACK SIZE=2><A HREF='" + VariableManager.getInstance().getVariablesManager().getObject("linkFileName") + "'>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</A></FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=20%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + VariableManager.getInstance().getVariablesManager().getObject("testCaseName") + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=VERDANA COLOR=BLACK SIZE=2>" + intDateDiff + "</FONT></TD><TD BGCOLOR=#EEEEEE WIDTH=10%><FONT FACE=WINGDINGS 2' SIZE=5 COLOR=RED>O</FONT><FONT FACE=VERDANA SIZE=2 COLOR=RED><B>" + strStatus + "</B></FONT></TD></TR>");
                 }
                 g_tSummaryTCStart_Time = d;
                 objFile.close();

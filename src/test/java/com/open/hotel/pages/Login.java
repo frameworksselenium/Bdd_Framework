@@ -1,15 +1,13 @@
 package com.open.hotel.pages;
 
-import com.open.hotel.security.Security;
-import com.open.hotel.utils.UIUtils;
-import com.open.hotel.utils.webDriverFactory.ManagerDriver;
+import com.open.abddf.security.Security;
+import com.open.abddf.uiUtils.UIUtils;
+import com.open.abddf.webDriverFactory.ManagerDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-
-import java.util.concurrent.TimeUnit;
 
 public class Login extends UIUtils {
 

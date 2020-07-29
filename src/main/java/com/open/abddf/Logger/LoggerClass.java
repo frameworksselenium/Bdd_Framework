@@ -1,7 +1,6 @@
-package com.open.hotel.utils;
+package com.open.abddf.Logger;
 
-import com.open.hotel.runner.TestNGRunner;
-import com.open.hotel.utils.loadConfig.Config;
+import com.open.abddf.loadConfig.Config;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 

@@ -1,7 +1,7 @@
 package com.open.hotel.runner;
 
-import com.open.hotel.utils.html.HtmlLog;
-import com.open.hotel.utils.loadConfig.Config;
+import com.open.abddf.html.HtmlLog;
+import com.open.abddf.loadConfig.Config;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;

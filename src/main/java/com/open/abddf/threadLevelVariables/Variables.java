@@ -1,4 +1,4 @@
-package com.open.hotel.utils.threadLevelVariables;
+package com.open.abddf.threadLevelVariables;
 
 import java.util.HashMap;
 

@@ -1,7 +1,6 @@
-package com.open.hotel.utils.webDriverFactory;
+package com.open.abddf.webDriverFactory;
 
-import com.open.hotel.runner.TestNGRunner;
-import com.open.hotel.utils.loadConfig.Config;
+import com.open.abddf.loadConfig.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;

@@ -1,17 +1,14 @@
 package com.open.hotel.hooks;
 
-import com.open.hotel.utils.LoggerClass;
-import com.open.hotel.utils.html.HtmlLog;
-import com.open.hotel.utils.webDriverFactory.LocalDriverFactory;
-import com.open.hotel.utils.webDriverFactory.ManagerDriver;
+import com.open.abddf.Logger.LoggerClass;
+import com.open.abddf.html.HtmlLog;
+import com.open.abddf.webDriverFactory.ManagerDriver;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
-import com.open.hotel.utils.webDriverFactory.RemoteDriverFactory;
-import com.open.hotel.utils.threadLevelVariables.VariableManager;
-import com.open.hotel.utils.threadLevelVariables.Variables;
-import com.open.hotel.runner.TestNGRunner;
+import com.open.abddf.threadLevelVariables.VariableManager;
+import com.open.abddf.threadLevelVariables.Variables;
 
 import java.text.ParseException;
 
@@ -19,16 +16,6 @@ public class Hooks{
 
 	@Before()
 	public void beforeScenario(Scenario scenario){
-
-	/*	String ExecutionMode = TestNGRunner.properties.getProperty("ExecutionMode");
-		WebDriver driver = null;
-		if (ExecutionMode.contains("Local")) {
-			driver = LocalDriverFactory.getInstance().createNewDriver();
-		} else if (ExecutionMode.contains("Remote")) {
-			driver = RemoteDriverFactory.getInstance().createNewDriver();
-		}
-		ManagerDriver.getInstance().setWebDriver(driver);
-*/
 		String testCaseName = scenario.getName().split(":")[1];
 		String testCaseID = scenario.getName().split(":")[0];
 
