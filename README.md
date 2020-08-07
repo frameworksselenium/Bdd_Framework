@@ -23,7 +23,7 @@ we can use JUnit or TestNG Runners, recommended to use TestNGRunner because para
  ### <a name = "3-5-1"></a>CLI Mode : Using Maven
  Open Terminal or Command prompt and navigate to the project directory.
  
-    mvn test -Dcucumber.options ="--tags @SmokeTest" -Dtestng.threadcount="2"
+    mvn test -Dcucumber.options="--tags '@SmokeTest or @all'" -Dtestng.threadcount="2"
 
  ### <a name = "3-5-1"></a>CLI Mode : Using IDE
 ![Testing Flow](Doc/RunFromIDE.png)
